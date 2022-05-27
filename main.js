@@ -1,10 +1,11 @@
 const X_CLASS = 'x'
 const CIRCLE_CLASS = 'circle'
-var p1Name = 'Player 1';
-var p2Name = 'Player 2';
+const score = document.getElementById('score');
+var p1Name = 'Player X';
+var p2Name = 'Player O';
 const scoreboard = {
-    player1: 0,
-    player2: 0,
+    x: 0,
+    o: 0,
     draw: 0
   };
 let gameCount = 0
@@ -97,11 +98,18 @@ function handleClick(e) {
 function endGame(draw) {
   if (draw) {
     winningMessageTextElement.innerText = 'Draw!'
+    scoreboard.draw++;
   } else {
-    winningMessageTextElement.innerText = `${circleTurn ? "O's" : "X's"} Wins!`
+    circleTurn ? scoreboard.o++ : scoreboard.x++
+    
+    winningMessageTextElement.innerText = `${circleTurn ? p2Name+"'s" : p1Name+"'s"} Wins!`
   }
+  gameCount++
+  setScoreContent()
+  refreshGameCountDisplay()
   winningMessageElement.classList.add('show')
 }
+
 
 function isDraw() {
   return [...cellElements].every(cell => {
@@ -135,21 +143,20 @@ function checkWin(currentClass) {
   })
 }
 
-if(endGame){
-    gameCount = gameCount+1;
-    refreshGameCountDisplay();
-}
+
+
 
 function setScoreContent(){ //to display score of player1 and player2
     score.innerHTML = `
-    <p><span id="p1namedisplay">${p1Name}</span><input type="text" id="p1name" style="display:none;">: ${scoreboard.player1}</p>
-    <p><span id="p2namedisplay">${p2Name}</span><input type="text" id="p2name" style="display:none;">: ${scoreboard.player2}</p>     
+    <p><span id="p1namedisplay">${p1Name}</span><input type="text" id="p1name" style="display:none;">: ${scoreboard.x}</p>
+    <p><span id="p2namedisplay">${p2Name}</span><input type="text" id="p2name" style="display:none;">: ${scoreboard.o}</p>     
     <p>Draw: ${scoreboard.draw}</p>
     `;
-    addListeners();
+    // addListeners();
   }
   
   function refreshGameCountDisplay(){  //to display number of game count
-    document.getElementById('noofgames').innerHTML = ` <p id="noofgames" style="background-color: black; color: white; text-align: center; margin: auto; width: 200px;">Number of games played:  ${gameCount} </p>` 
+    document.getElementById('noofgames').innerText = `Number of games played:  ${gameCount}` 
     
   }
+  
